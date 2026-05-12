@@ -28,18 +28,22 @@
     <link rel="icon" href="./favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="canonical" href="https://kajitack.com/" />
+    <link rel="preload" as="image" href="./images/avatar.webp" type="image/webp" />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <main>
       <header>
-        <img
-          class="avatar"
-          src="./images/avatar.png"
-          alt=""
-          width="88"
-          height="88"
-        />
+        <picture>
+          <source srcset="./images/avatar.webp" type="image/webp" />
+          <img
+            class="avatar"
+            src="./images/avatar.png"
+            alt=""
+            width="88"
+            height="88"
+          />
+        </picture>
         <h1>Takuma Kajikawa</h1>
         <p class="name-ja">梶川 琢馬</p>
         <p class="lede">
