@@ -60,8 +60,25 @@ h2 {
   margin: 2.5rem 0 0.75rem;
 }
 
+.name-ja {
+  margin: 0 0 0.75rem;
+  color: var(--fg-muted);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+
 .lede {
+  margin: 0 0 0.25rem;
+  color: var(--fg);
+}
+
+.role {
   margin: 0;
+  color: var(--fg-muted);
+  font-size: 0.95rem;
+}
+
+.muted {
   color: var(--fg-muted);
 }
 
@@ -69,9 +86,42 @@ section + section {
   margin-top: 1rem;
 }
 
+p {
+  margin: 0 0 0.75rem;
+}
+
 ul {
   padding-left: 1.25rem;
   margin: 0;
+}
+
+li + li {
+  margin-top: 0.25rem;
+}
+
+.link-list {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+
+.link-list li + li {
+  margin-top: 0;
+}
+
+code {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--rule);
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+}
+
+a code {
+  color: inherit;
 }
 
 a {
