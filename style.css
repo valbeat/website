@@ -78,10 +78,6 @@ h2 {
   font-size: 0.95rem;
 }
 
-.muted {
-  color: var(--fg-muted);
-}
-
 section + section {
   margin-top: 1rem;
 }
@@ -111,18 +107,6 @@ li + li {
   margin-top: 0;
 }
 
-code {
-  font-family:
-    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.9em;
-  background: var(--rule);
-  padding: 0.05em 0.35em;
-  border-radius: 3px;
-}
-
-a code {
-  color: inherit;
-}
 
 a {
   color: var(--accent);
