@@ -16,12 +16,12 @@ reviews:
       - main
   path_filters:
     - "!images/**"
-    - "!*.ico"
-    - "!*.png"
-    - "!*.webp"
-    - "!*.jpg"
-    - "!*.gif"
-    - "!*.svg"
+    - "!**/*.ico"
+    - "!**/*.png"
+    - "!**/*.webp"
+    - "!**/*.jpg"
+    - "!**/*.gif"
+    - "!**/*.svg"
 
 chat:
   auto_reply: true
