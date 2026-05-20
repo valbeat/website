@@ -1,0 +1,13 @@
+{
+  "name": "kajitack-website",
+  "private": true,
+  "description": "Dev-only tooling (visual regression tests). Production site is plain HTML/CSS.",
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
+  }
+}
