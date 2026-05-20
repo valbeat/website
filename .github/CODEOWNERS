@@ -11,3 +11,5 @@
 /.npmrc                 @valbeat
 /package.json           @valbeat
 /pnpm-lock.yaml         @valbeat
+/playwright.config.*    @valbeat
+/tests/                 @valbeat
