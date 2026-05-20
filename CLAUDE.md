@@ -13,6 +13,7 @@ Takuma Kajikawa の個人ポートフォリオ / ブログサイト。素の HTM
 - **HTML / CSS のみ**。JavaScript フレームワーク、ビルドステップ、パッケージマネージャー（npm, pnpm 等）は導入しない
 - 必要が出た場合のみ、最小限の素の JavaScript を許容する
 - 依存追加・ツールチェーン導入は必ず事前に相談する
+- 例外: `package.json` / `node_modules` は **dev 限定の visual regression テスト用途** に限り導入済み（後述）。本体配信ファイルには影響しない
 
 ## Deployment
 
@@ -42,5 +43,36 @@ npx serve .
 - 相対パスでリンクを記述し、GitHub Pages のサブパス配信でも壊れないようにする
 - 画像は `images/` 等の専用ディレクトリにまとめ、ファイル名でも内容が分かるようにする
 - 例外: `favicon.ico` と `apple-touch-icon.png` はブラウザのデフォルト探索に合わせ **リポジトリ直下** に配置する
+
+## Visual Regression Testing
+
+PR ごとに描画スクリーンショットを取得し、PR コメントにインライン表示する仕組みを `.github/workflows/visual-regression.yml` で運用。
+
+### 構成
+
+- **Playwright** で chromium / desktop + mobile viewport × light / dark をキャプチャ
+- ベースライン PNG は `tests/visual.spec.js-snapshots/` にコミット
+- CI は PR 開く / 更新ごとに走り、結果を **orphan branch `visual-results`** の `pr-N/run-M/` に push
+- PR コメント（sticky）に `raw.githubusercontent.com` 経由の URL で画像を埋め込み
+
+### ローカル実行
+
+```bash
+npm install                 # 初回のみ
+npx playwright install      # ブラウザ取得（初回のみ）
+npm run serve &             # 別シェルでも可
+npm run test:visual         # スナップショット比較
+```
+
+ベースラインは Linux/CI 上で生成された PNG なので、ローカル (macOS) で `--update-snapshots` するとフォント描画差で全部書き換わる。**ベースラインは更新しないこと**。
+
+### ベースラインを意図的に更新する
+
+CSS / HTML を変えてスクリーンショットを差し替えたい場合は、GitHub Actions の `Update Visual Snapshots` ワークフローを **workflow_dispatch** で対象ブランチを指定して実行する。CI が `--update-snapshots` で再生成し、同ブランチに `chore: update visual regression baselines` で push する。
+
+### 新規テスト追加 / 削除
+
+- テストは `tests/visual.spec.js`。viewport / テーマの組み合わせをループで展開している
+- テスト名から決まるベースラインファイル名を変えると古い PNG が孤立するので、`tests/visual.spec.js-snapshots/` の不要ファイルは合わせて削除する
 
 このプロジェクトでは設定ファイルやコマンドが追加された段階で、このドキュメントを更新する。

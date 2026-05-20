@@ -1,0 +1,58 @@
+name: Update Visual Snapshots
+
+# Manually re-generates the Playwright snapshot baselines for a given branch
+# and commits them back. Run this from a PR branch when an intentional visual
+# change is being introduced.
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Branch (or ref) to update baselines on"
+        required: true
+        default: "main"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout target ref
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Regenerate snapshots
+        run: npx playwright test --update-snapshots
+
+      - name: Commit and push baselines
+        env:
+          TARGET_REF: ${{ inputs.ref }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add tests/
+          if git diff --cached --quiet; then
+            echo "No baseline changes."
+            exit 0
+          fi
+          git commit -m "chore: update visual regression baselines"
+          git push origin "HEAD:${TARGET_REF}"
