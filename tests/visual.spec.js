@@ -16,16 +16,18 @@ for (const theme of themes) {
       await page.waitForLoadState("networkidle");
       await page.evaluate(() => document.fonts.ready);
 
-      const fileName = `top-${theme.name}-${testInfo.project.name}.png`;
-
-      // Save a fresh "current" PNG outside Playwright's test-results dir so we
-      // can always show it in the PR comment, even when the diff check passes.
+      // Playwright auto-suffixes toHaveScreenshot with -{project}-{platform},
+      // so keep the explicit name short and add the project to the current
+      // screenshot path manually to keep desktop/mobile separate.
+      const baseName = `top-${theme.name}`;
       await page.screenshot({
-        path: `current-screenshots/${fileName}`,
+        path: `current-screenshots/${baseName}-${testInfo.project.name}.png`,
         fullPage: true,
       });
 
-      await expect(page).toHaveScreenshot(fileName, { fullPage: true });
+      await expect(page).toHaveScreenshot(`${baseName}.png`, {
+        fullPage: true,
+      });
     });
 
     test("404 page", async ({ page }, testInfo) => {
@@ -33,14 +35,15 @@ for (const theme of themes) {
       await page.waitForLoadState("networkidle");
       await page.evaluate(() => document.fonts.ready);
 
-      const fileName = `404-${theme.name}-${testInfo.project.name}.png`;
-
+      const baseName = `404-${theme.name}`;
       await page.screenshot({
-        path: `current-screenshots/${fileName}`,
+        path: `current-screenshots/${baseName}-${testInfo.project.name}.png`,
         fullPage: true,
       });
 
-      await expect(page).toHaveScreenshot(fileName, { fullPage: true });
+      await expect(page).toHaveScreenshot(`${baseName}.png`, {
+        fullPage: true,
+      });
     });
   });
 }
