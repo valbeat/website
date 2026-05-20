@@ -1,0 +1,54 @@
+name: Scorecard supply-chain security
+
+# Runs the OpenSSF Scorecard on a schedule (and on push to main) to score
+# the repo against supply-chain best practices: pinned dependencies, branch
+# protection, dangerous workflows, token permissions, etc.
+# Results are uploaded to:
+#   1. GitHub Security tab (Code scanning) via SARIF
+#   2. publish-results=true reports to the OpenSSF API so the score appears
+#      on https://scorecard.dev/
+
+on:
+  branch_protection_rule:
+  schedule:
+    - cron: "21 9 * * 1" # Monday 09:21 UTC
+  push:
+    branches: [main]
+
+permissions: read-all
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed to upload SARIF results to the Code scanning dashboard.
+      security-events: write
+      # Needed for the OIDC token used by publish_results.
+      id-token: write
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Run analysis
+        uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Upload SARIF results to code-scanning dashboard
+        uses: github/codeql-action/upload-sarif@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5
+        with:
+          sarif_file: results.sarif
+
+      - name: Upload SARIF as artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: scorecard-results
+          path: results.sarif
+          retention-days: 5
