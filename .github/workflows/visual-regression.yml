@@ -11,6 +11,7 @@ on:
       - "playwright.config.*"
       - "package.json"
       - "pnpm-lock.yaml"
+      - ".npmrc"
       - ".github/workflows/visual-regression.yml"
       - ".github/scripts/build-visual-comment.js"
 
