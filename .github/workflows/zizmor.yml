@@ -1,0 +1,35 @@
+name: zizmor
+
+# Static analysis for GitHub Actions workflows. Catches things like:
+#   - unpinned action references
+#   - template-injection via ${{ }} into shell
+#   - excessive GITHUB_TOKEN permissions
+#   - artifact poisoning patterns
+# Same tool CodeRabbit already runs internally; running it ourselves makes
+# the failure mode visible in CI rather than as a review-time comment.
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - ".github/workflows/zizmor.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/**"
+      - ".github/actions/**"
+
+permissions:
+  contents: read
+
+jobs:
+  zizmor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Run zizmor
+        uses: zizmorcore/zizmor-action@5f14fd08f7cf1cb1609c1e344975f152c7ee938d # v0.5.6

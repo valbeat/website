@@ -1,0 +1,15 @@
+# Code owners — surface for review attention on sensitive paths.
+# To actually enforce, enable "Require review from Code Owners" in branch
+# protection settings.
+#
+# Default: repo owner.
+*                       @valbeat
+
+# CI & supply-chain config — small surface that affects every build, so any
+# change deserves a deliberate review.
+/.github/               @valbeat
+/.npmrc                 @valbeat
+/package.json           @valbeat
+/pnpm-lock.yaml         @valbeat
+/playwright.config.*    @valbeat
+/tests/                 @valbeat
