@@ -41,8 +41,10 @@ module.exports = defineConfig({
       },
     },
     {
+      // Pixel 5 device descriptor defaults to chromium so we don't need to
+      // install webkit just for mobile emulation.
       name: "mobile",
-      use: { ...devices["iPhone 13"] },
+      use: { ...devices["Pixel 5"] },
     },
   ],
 });
