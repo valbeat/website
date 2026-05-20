@@ -2,6 +2,7 @@
   "name": "kajitack-website",
   "private": true,
   "description": "Dev-only tooling (visual regression tests). Production site is plain HTML/CSS.",
+  "packageManager": "pnpm@10.12.2",
   "scripts": {
     "serve": "python3 -m http.server 8000",
     "test:visual": "playwright test",
