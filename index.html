@@ -143,9 +143,19 @@
               btn.dataset.themeValue === value ? "true" : "false"
             );
           });
-          var isDark = value === "dark" || (value === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+          // For an explicit Light/Dark choice, force both meta theme-color
+          // tags to the chosen color. For Auto (system), restore each meta's
+          // media-gated default so the browser can keep tracking OS changes.
           document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
-            m.setAttribute("content", isDark ? "#141414" : "#fdfdfd");
+            var media = m.getAttribute("media") || "";
+            var darkSlot = media.indexOf("dark") !== -1;
+            var content;
+            if (value === "system") {
+              content = darkSlot ? "#141414" : "#fdfdfd";
+            } else {
+              content = value === "dark" ? "#141414" : "#fdfdfd";
+            }
+            m.setAttribute("content", content);
           });
         }
         sync(current);
