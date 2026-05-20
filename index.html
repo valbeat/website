@@ -31,6 +31,21 @@
     <link rel="preload" as="image" href="./images/avatar.webp" type="image/webp" />
     <link rel="stylesheet" href="./style.css" />
 
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored && stored !== "system") {
+            document.documentElement.setAttribute("data-theme", stored);
+            var isDark = stored === "dark";
+            document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+              m.setAttribute("content", isDark ? "#141414" : "#fdfdfd");
+            });
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -100,7 +115,56 @@
 
       <footer>
         <p>&copy; 2026 Takuma Kajikawa</p>
+        <p class="theme-switcher" role="group" aria-label="テーマ">
+          <span aria-hidden="true">Theme:</span>
+          <button type="button" data-theme-value="light" aria-pressed="false">Light</button>
+          <span aria-hidden="true">·</span>
+          <button type="button" data-theme-value="dark" aria-pressed="false">Dark</button>
+          <span aria-hidden="true">·</span>
+          <button type="button" data-theme-value="system" aria-pressed="true">Auto</button>
+        </p>
       </footer>
     </main>
+
+    <script>
+      (function () {
+        var buttons = document.querySelectorAll(
+          ".theme-switcher [data-theme-value]"
+        );
+        if (!buttons.length) return;
+        var current = "system";
+        try {
+          current = localStorage.getItem("theme") || "system";
+        } catch (e) {}
+        function sync(value) {
+          buttons.forEach(function (btn) {
+            btn.setAttribute(
+              "aria-pressed",
+              btn.dataset.themeValue === value ? "true" : "false"
+            );
+          });
+          var isDark = value === "dark" || (value === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+            m.setAttribute("content", isDark ? "#141414" : "#fdfdfd");
+          });
+        }
+        sync(current);
+        buttons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var value = btn.dataset.themeValue;
+            try {
+              if (value === "system") {
+                localStorage.removeItem("theme");
+                document.documentElement.removeAttribute("data-theme");
+              } else {
+                localStorage.setItem("theme", value);
+                document.documentElement.setAttribute("data-theme", value);
+              }
+            } catch (e) {}
+            sync(value);
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
