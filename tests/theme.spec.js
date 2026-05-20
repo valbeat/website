@@ -75,4 +75,67 @@ test.describe("theme-color meta tracking", () => {
       { media: "(prefers-color-scheme: dark)", content: "#141414" },
     ]);
   });
+
+  test("Forced Dark stays dark when OS flips to dark", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    await page.click('.theme-switcher [data-theme-value="dark"]');
+    await page.emulateMedia({ colorScheme: "dark" });
+
+    expect(
+      (await readMetas(page)).map((m) => m.content),
+    ).toEqual(["#141414", "#141414"]);
+    expect(
+      await page.evaluate(() =>
+        getComputedStyle(document.body).backgroundColor
+      ),
+    ).toBe("rgb(20, 20, 20)");
+  });
+
+  test("Auto → Dark → Auto, then OS flips, page and metas stay in sync", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    await page.click('.theme-switcher [data-theme-value="dark"]');
+    await page.click('.theme-switcher [data-theme-value="system"]');
+    await page.emulateMedia({ colorScheme: "dark" });
+
+    expect(await readMetas(page)).toEqual([
+      { media: "(prefers-color-scheme: light)", content: "#fdfdfd" },
+      { media: "(prefers-color-scheme: dark)", content: "#141414" },
+    ]);
+    expect(
+      await page.evaluate(() =>
+        getComputedStyle(document.body).backgroundColor
+      ),
+    ).toBe("rgb(20, 20, 20)");
+  });
+
+  test("Persists Dark across reload via the FOUC head script", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    await page.click('.theme-switcher [data-theme-value="dark"]');
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+
+    expect(
+      await page.evaluate(() => ({
+        dataTheme: document.documentElement.getAttribute("data-theme"),
+        ls: localStorage.getItem("theme"),
+        bodyBg: getComputedStyle(document.body).backgroundColor,
+      })),
+    ).toEqual({
+      dataTheme: "dark",
+      ls: "dark",
+      bodyBg: "rgb(20, 20, 20)",
+    });
+    expect(
+      (await readMetas(page)).map((m) => m.content),
+    ).toEqual(["#141414", "#141414"]);
+  });
 });
