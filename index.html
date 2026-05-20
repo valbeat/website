@@ -37,6 +37,10 @@
           var stored = localStorage.getItem("theme");
           if (stored && stored !== "system") {
             document.documentElement.setAttribute("data-theme", stored);
+            var isDark = stored === "dark";
+            document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+              m.setAttribute("content", isDark ? "#141414" : "#fdfdfd");
+            });
           }
         } catch (e) {}
       })();
@@ -138,6 +142,10 @@
               "aria-pressed",
               btn.dataset.themeValue === value ? "true" : "false"
             );
+          });
+          var isDark = value === "dark" || (value === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+            m.setAttribute("content", isDark ? "#141414" : "#fdfdfd");
           });
         }
         sync(current);
