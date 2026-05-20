@@ -8,13 +8,21 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --fg: #e8e8e8;
     --fg-muted: #a0a0a0;
     --bg: #141414;
     --accent: #6aa9ff;
     --rule: #2a2a2a;
   }
+}
+
+[data-theme="dark"] {
+  --fg: #e8e8e8;
+  --fg-muted: #a0a0a0;
+  --bg: #141414;
+  --accent: #6aa9ff;
+  --rule: #2a2a2a;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -150,4 +158,36 @@ footer {
 
 footer p {
   margin: 0;
+}
+
+.theme-switcher {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: baseline;
+}
+
+.theme-switcher button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.theme-switcher button:hover,
+.theme-switcher button:focus-visible {
+  color: var(--fg);
+  outline: none;
+}
+
+.theme-switcher button[aria-pressed="true"] {
+  color: var(--fg);
+  border-bottom-color: currentColor;
 }

@@ -11,6 +11,17 @@
     <link rel="icon" href="./favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="stylesheet" href="./style.css" />
+
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored && stored !== "system") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <main>
