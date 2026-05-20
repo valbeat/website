@@ -16,7 +16,9 @@ Takuma Kajikawa の個人ポートフォリオ / ブログサイト。素の HTM
 - 例外: `package.json` / `node_modules` は **dev 限定の visual regression テスト用途** に限り導入済み（後述）。本体配信ファイルには影響しない
 - パッケージマネージャは **pnpm**（`package.json` の `packageManager` フィールドでバージョン固定）
 - Node.js のバージョンは `package.json` の `volta.node` フィールド（Volta は `.nvmrc` / `.node-version` を読まないため exact 指定）。CI は `actions/setup-node` の `node-version-file: package.json` で同フィールドを読む
-- サプライチェーン対策: `.npmrc` で `ignore-scripts=true`（postinstall 等のライフサイクルスクリプトを全 dep で禁止）。Playwright のブラウザ DL は明示の `playwright install` 経由なので影響なし
+- サプライチェーン対策: `.npmrc` で
+  - `ignore-scripts=true` — postinstall 等のライフサイクルスクリプトを全 dep で禁止。Playwright のブラウザ DL は明示の `playwright install` 経由なので影響なし
+  - `minimum-release-age=4320`（3 日）— 公開直後の新版を install させない。乗っ取り公開直後のマルウェアをコミュニティが取り下げる猶予を稼ぐ
 
 ## Deployment
 
