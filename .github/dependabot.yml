@@ -1,0 +1,30 @@
+version: 2
+updates:
+  # GitHub Actions — all uses: pins are SHA-pinned with a "# vX.Y.Z" comment,
+  # which Dependabot uses to detect new versions. Group non-major bumps into
+  # one PR; let majors come individually so they get a closer look.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      timezone: Asia/Tokyo
+    commit-message:
+      prefix: chore
+    groups:
+      actions:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # pnpm (handled by Dependabot's npm ecosystem). One direct dep today
+  # (@playwright/test); keep the config simple and let each update arrive as
+  # its own PR.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      timezone: Asia/Tokyo
+    commit-message:
+      prefix: chore
