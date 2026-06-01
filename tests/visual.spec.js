@@ -45,5 +45,21 @@ for (const theme of themes) {
         fullPage: true,
       });
     });
+
+    test("top page (en)", async ({ page }, testInfo) => {
+      await page.goto("/en/");
+      await page.waitForLoadState("networkidle");
+      await page.evaluate(() => document.fonts.ready);
+
+      const baseName = `top-en-${theme.name}`;
+      await page.screenshot({
+        path: `current-screenshots/${baseName}-${testInfo.project.name}.png`,
+        fullPage: true,
+      });
+
+      await expect(page).toHaveScreenshot(`${baseName}.png`, {
+        fullPage: true,
+      });
+    });
   });
 }

@@ -160,7 +160,8 @@ footer p {
   margin: 0;
 }
 
-.theme-switcher {
+.theme-switcher,
+.lang-switcher {
   margin: 0.5rem 0 0;
   font-size: 0.875rem;
   color: var(--fg-muted);
@@ -190,4 +191,18 @@ footer p {
 .theme-switcher button[aria-pressed="true"] {
   color: var(--fg);
   border-bottom-color: currentColor;
+}
+
+.lang-switcher a {
+  color: inherit;
+}
+
+.lang-switcher a:hover,
+.lang-switcher a:focus-visible {
+  color: var(--fg);
+}
+
+.lang-switcher strong {
+  font-weight: 600;
+  color: var(--fg);
 }
