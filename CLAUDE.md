@@ -49,6 +49,18 @@ npx serve .
 - 画像は `images/` 等の専用ディレクトリにまとめ、ファイル名でも内容が分かるようにする
 - 例外: `favicon.ico` と `apple-touch-icon.png` はブラウザのデフォルト探索に合わせ **リポジトリ直下** に配置する
 
+## Internationalization (i18n)
+
+日本語⇄英語は **言語別の静的ページ + hreflang** で提供する（i18n ライブラリは使わない）。
+
+- 言語ごとに独立した HTML を持つ: `/`（日本語・正準 / x-default）と `/en/`（英語）
+- 両ページの `<head>` に `<link rel="alternate" hreflang>`（`ja` / `en` / `x-default`）と `og:locale` を相互に張る。各ページの `canonical` は自分自身
+- **`/en/` 配下はサブディレクトリなので、アセット参照は `../` 相対パス**（`../style.css`, `../images/...`, `../favicon.ico`）。`/` 直下は従来どおり `./`
+- 初回訪問の自動言語判定はルート `/` の `<head>` 内 IIFE でのみ行う（`localStorage.lang` 未設定 かつ `navigator.language` が英語なら `/en/` へ `location.replace`）。`/en/` 側では判定しない（リダイレクトループ防止）。言語スイッチャーのクリックで `localStorage.lang` を保存し、以降の自動判定を抑止する
+- **`404.html` は日英併記**。GitHub Pages の custom 404 はリポジトリ直下の `404.html` 一つしか効かず、`/en/404.html` はサブパスでも使われないため
+- `sitemap.xml` は全言語 URL を列挙し、各 `<url>` に `xhtml:link rel="alternate" hreflang` を付ける
+- 新しい言語別ページを追加したら、`tests/visual.spec.js` に対応する VRT を足す（ベースラインは CI で生成）
+
 ## Visual Regression Testing
 
 PR ごとに描画スクリーンショットを取得し、PR コメントにインライン表示する仕組みを `.github/workflows/visual-regression.yml` で運用。
