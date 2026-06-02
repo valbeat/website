@@ -47,7 +47,7 @@
             !localStorage.getItem("lang") &&
             (navigator.language || "").toLowerCase().indexOf("en") === 0
           ) {
-            location.replace("/en/");
+            location.replace("/en/" + location.search + location.hash);
           }
         } catch (e) {}
       })();
