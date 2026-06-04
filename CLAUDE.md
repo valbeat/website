@@ -61,6 +61,15 @@ npx serve .
 - `sitemap.xml` は全言語 URL を列挙し、各 `<url>` に `xhtml:link rel="alternate" hreflang` を付ける
 - 新しい言語別ページを追加したら、`tests/visual.spec.js` に対応する VRT を足す（ベースラインは CI で生成）
 
+## OGP Image
+
+`images/og.png`（1200×630, 8-bit sRGB）は手書きせず、テンプレートから生成する。
+
+- テンプレート: `tools/og/template.html`（色・フォントは `style.css` と揃える）
+- 生成: `pnpm og:generate`（Playwright chromium で 1200×630 をスクリーンショット）
+- 文言やデザインを変えたらテンプレートを編集 → 再生成してコミットする
+- 生成はローカル (macOS) で行う前提（フォントはシステムの Hiragino Sans に依存）。OGP 画像はページ描画に出ないため VRT ベースラインには影響しない
+
 ## Visual Regression Testing
 
 PR ごとに描画スクリーンショットを取得し、PR コメントにインライン表示する仕組みを `.github/workflows/visual-regression.yml` で運用。
