@@ -1,0 +1,123 @@
+<!doctype html>
+<!--
+  OGP image template (1200x630).
+  Rendered by tools/og/generate.mjs (Playwright) into images/og.png.
+  Keep colors / typography in sync with style.css.
+-->
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root {
+        --fg: #1a1a1a;
+        --fg-muted: #555;
+        --bg: #fdfdfd;
+        --accent: #0066cc;
+        --rule: #e5e5e5;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI",
+          "Segoe UI", sans-serif;
+        color: var(--fg);
+        background: var(--bg);
+      }
+
+      .card {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 96px;
+        border-top: 10px solid var(--accent);
+      }
+
+      .text {
+        max-width: 660px;
+      }
+
+      .name {
+        font-size: 76px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.15;
+      }
+
+      .name-ja {
+        margin-top: 16px;
+        font-size: 30px;
+        color: var(--fg-muted);
+        letter-spacing: 0.06em;
+      }
+
+      .role {
+        margin-top: 40px;
+        font-size: 28px;
+        color: var(--fg);
+        line-height: 1.5;
+      }
+
+      .role .muted {
+        color: var(--fg-muted);
+      }
+
+      .site {
+        position: absolute;
+        left: 96px;
+        bottom: 56px;
+        font-size: 26px;
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: 0.02em;
+      }
+
+      .avatar-wrap {
+        flex-shrink: 0;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: #f1f1ef;
+        border: 1px solid var(--rule);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .avatar-wrap img {
+        width: 78%;
+        height: 78%;
+        object-fit: contain;
+        /* avatar.png is a dark render; lift it so it reads at thumbnail size */
+        filter: brightness(1.35) contrast(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="text">
+        <div class="name">Takuma Kajikawa</div>
+        <div class="name-ja">梶川 琢馬</div>
+        <div class="role">
+          Software Engineer / Tokyo, Japan<br />
+          <span class="muted">VP of Technology @ TechBowl</span>
+        </div>
+        <div class="site">kajitack.com</div>
+      </div>
+      <div class="avatar-wrap">
+        <img src="../../images/avatar.png" alt="" />
+      </div>
+    </div>
+  </body>
+</html>

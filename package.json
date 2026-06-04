@@ -8,6 +8,7 @@
   },
   "scripts": {
     "serve": "python3 -m http.server 8000",
+    "og:generate": "node tools/og/generate.mjs",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots"
   },
