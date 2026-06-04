@@ -11,7 +11,9 @@ reviews:
   review_status: true
   auto_review:
     enabled: true
-    drafts: false
+    # PR は常に draft で作るワークフローのため、draft もレビュー対象にする
+    # （false だと毎回 "Review skipped: Draft detected" コメントが付く）
+    drafts: true
     base_branches:
       - main
   path_filters:
