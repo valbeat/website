@@ -1,16 +1,16 @@
 name: Update Visual Snapshots
 
-# Manually re-generates the Playwright snapshot baselines for a given branch
-# and commits them back. Run this from a PR branch when an intentional visual
-# change is being introduced.
+# Manually re-generates the Playwright snapshot baselines for the branch this
+# workflow is dispatched on, and commits them back to that same branch.
+#
+#   gh workflow run "Update Visual Snapshots" --ref <pr-branch>
+#
+# The target branch is always the dispatch ref (github.ref) — there is no
+# separate input, so baselines can never be pushed to an unintended branch.
+# Run this from a PR branch when an intentional visual change is introduced.
 
 on:
   workflow_dispatch:
-    inputs:
-      ref:
-        description: "Branch (or ref) to update baselines on"
-        required: true
-        default: "main"
 
 permissions:
   contents: write
@@ -20,10 +20,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Refuse to run on main
+        if: github.ref_name == 'main'
+        run: |
+          echo "Refusing to regenerate baselines directly on main." >&2
+          echo "Dispatch this workflow on a PR branch (--ref <branch>) instead." >&2
+          exit 1
+
       - name: Checkout target ref
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
-          ref: ${{ inputs.ref }}
           fetch-depth: 0
 
       - name: Setup pnpm
@@ -46,7 +52,7 @@ jobs:
 
       - name: Commit and push baselines
         env:
-          TARGET_REF: ${{ inputs.ref }}
+          TARGET_REF: ${{ github.ref_name }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
