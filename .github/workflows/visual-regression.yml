@@ -1,19 +1,12 @@
 name: Visual Regression
 
 on:
+  # Runs on every PR (no paths filter) so this check is always reported and can
+  # safely be a required status check. When the PR touches none of the visually
+  # relevant paths, the job exits early as a success (see "Detect relevant
+  # changes" below) instead of being skipped — a skipped required check would
+  # block the PR forever.
   pull_request:
-    paths:
-      - "**/*.html"
-      - "**/*.css"
-      - "**/*.js"
-      - "images/**"
-      - "tests/**"
-      - "playwright.config.*"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - ".npmrc"
-      - ".github/workflows/visual-regression.yml"
-      - ".github/scripts/build-visual-comment.js"
 
 permissions:
   contents: write
@@ -35,29 +28,49 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Detect relevant changes
+        id: changes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          # Three-dot diff: changes on the PR head since it diverged from base.
+          if git diff --name-only "${BASE_SHA}...HEAD" \
+            | grep -qE '\.(html|css|js)$|^images/|^tests/|^playwright\.config\.|^package\.json$|^pnpm-lock\.yaml$|^\.npmrc$|^\.github/workflows/visual-regression\.yml$|^\.github/scripts/build-visual-comment\.js$'; then
+            echo "relevant=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "relevant=false" >> "$GITHUB_OUTPUT"
+            echo "No visually relevant changes; the job will pass without running Playwright."
+          fi
+
       - name: Setup pnpm
+        if: steps.changes.outputs.relevant == 'true'
         uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
 
       - name: Setup Node.js
+        if: steps.changes.outputs.relevant == 'true'
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: package.json
           cache: pnpm
 
       - name: Install dependencies
+        if: steps.changes.outputs.relevant == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Chromium
+        if: steps.changes.outputs.relevant == 'true'
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run visual tests
         id: playwright
+        if: steps.changes.outputs.relevant == 'true'
         run: pnpm exec playwright test
         continue-on-error: true
 
       - name: Stage screenshots for upload
         id: stage
-        if: always()
+        if: always() && steps.changes.outputs.relevant == 'true'
         run: |
           set -euo pipefail
           STAGE="$(mktemp -d)"
@@ -80,7 +93,7 @@ jobs:
           echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
 
       - name: Push screenshots to visual-results branch
-        if: always()
+        if: always() && steps.changes.outputs.relevant == 'true'
         env:
           STAGE: ${{ steps.stage.outputs.stage }}
           PR_NUM: ${{ github.event.pull_request.number }}
@@ -140,7 +153,7 @@ jobs:
           git worktree remove --force "$WORKTREE"
 
       - name: Build PR comment
-        if: always()
+        if: always() && steps.changes.outputs.relevant == 'true'
         env:
           PR_NUM: ${{ github.event.pull_request.number }}
           RUN_ID: ${{ github.run_id }}
@@ -149,14 +162,14 @@ jobs:
         run: node .github/scripts/build-visual-comment.js
 
       - name: Post sticky comment
-        if: always()
+        if: always() && steps.changes.outputs.relevant == 'true'
         uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
         with:
           header: visual-regression
           path: comment.md
 
       - name: Upload Playwright report
-        if: always()
+        if: always() && steps.changes.outputs.relevant == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: playwright-report
@@ -164,7 +177,7 @@ jobs:
           retention-days: 14
 
       - name: Upload raw test results
-        if: always()
+        if: always() && steps.changes.outputs.relevant == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: test-results
