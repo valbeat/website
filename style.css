@@ -54,6 +54,17 @@ body {
   line-height: 1.7;
 }
 
+/*
+ * 日本語の自然な改行（文節単位での折り返し）。
+ * auto-phrase は対応ブラウザ（Chromium 系）でのみ働き、
+ * 非対応ブラウザでは normal 相当に無視されるため安全。
+ * lang="en" の /en/ 配下には適用しない。
+ */
+:lang(ja) {
+  word-break: auto-phrase;
+  line-break: strict;
+}
+
 main {
   max-width: var(--max-width);
   margin: 0 auto;
