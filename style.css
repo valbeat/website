@@ -4,7 +4,7 @@
   --bg: #fdfdfd;
   --accent: #0066cc;
   --rule: #e5e5e5;
-  --max-width: 32rem;
+  --max-width: 38rem;
 }
 
 @media (prefers-color-scheme: dark) {
