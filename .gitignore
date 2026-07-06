@@ -4,3 +4,8 @@ test-results/
 current-screenshots/
 .DS_Store
 .wrangler/
+.dev.vars
+.env
+.env.*
+.vscode/
+.idea/
