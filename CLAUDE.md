@@ -4,31 +4,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Takuma Kajikawa の個人ポートフォリオ / ブログサイト。素の HTML + CSS のみで構成し、GitHub Pages にデプロイする。ビルドツールやフレームワーク（Next.js, Astro 等）は導入しない方針。
-
-リポジトリは初期化直後で、現時点では `README.md` と `LICENSE` のみ。コンテンツとスタイルはこれから追加していく。
+Takuma Kajikawa の個人ポートフォリオ / ブログサイト。素の HTML + CSS のみで構成し、Cloudflare Workers (static assets) にデプロイする。ビルドツールやフレームワーク（Next.js, Astro 等）は導入しない方針。
 
 ## Tech Stack Constraints
 
 - **HTML / CSS のみ**。JavaScript フレームワーク、ビルドステップ、パッケージマネージャー（npm, pnpm 等）は導入しない
 - 必要が出た場合のみ、最小限の素の JavaScript を許容する
 - 依存追加・ツールチェーン導入は必ず事前に相談する
-- 例外: `package.json` / `node_modules` は **dev 限定の visual regression テスト用途** に限り導入済み（後述）。本体配信ファイルには影響しない
+- 例外: `package.json` / `node_modules` は **dev 限定ツール（visual regression テストと wrangler によるデプロイ）** に限り導入済み（後述）。本体配信ファイルには影響しない（`.assetsignore` で配信対象から除外）
 - パッケージマネージャは **pnpm**（`package.json` の `packageManager` フィールドでバージョン固定）
 - Node.js のバージョンは `package.json` の `volta.node` フィールド（Volta は `.nvmrc` / `.node-version` を読まないため exact 指定）。CI は `actions/setup-node` の `node-version-file: package.json` で同フィールドを読む
 - サプライチェーン対策: `.npmrc` で
   - `ignore-scripts=true` — postinstall 等のライフサイクルスクリプトを全 dep で禁止。Playwright のブラウザ DL は明示の `playwright install` 経由なので影響なし
   - `minimum-release-age=4320`（3 日）— 公開直後の新版を install させない。乗っ取り公開直後のマルウェアをコミュニティが取り下げる猶予を稼ぐ
+- ビルドスクリプトを持つ推移的依存（wrangler 経由の esbuild / sharp / workerd）は `pnpm-workspace.yaml` の `allowBuilds` で実行を**明示的に拒否**している。pnpm 11 は未申告だとインストールをエラーにするため、該当依存が増えたら同ファイルに `false` で追記する
 
 ## Deployment
 
-- **GitHub Pages** にホスティング
-- `main` ブランチへの push がデプロイトリガー（GitHub Pages の設定に従う）
-- ビルド出力ディレクトリは存在しない（リポジトリのファイルがそのまま配信される）
-- カスタムドメイン: **kajitack.com**（Cloudflare で取得・DNS 管理）
-  - GitHub Pages の Custom domain 設定に `kajitack.com` を登録し、`CNAME` ファイルをリポジトリ直下に配置する
-  - Cloudflare DNS で apex (`kajitack.com`) は GitHub Pages の A レコード 4 つ、`www` は `valbeat.github.io` への CNAME を設定
-  - Cloudflare のプロキシ（オレンジ雲）を有効にする場合、GitHub Pages 側で HTTPS を有効化したうえで Cloudflare 側を **Full (strict)** にする（**Flexible** はリダイレクトループの原因になるので不可）
+- **Cloudflare Workers (static assets)** にホスティング。設定は `wrangler.jsonc`
+- `main` への push で `.github/workflows/deploy.yml` が `wrangler deploy` を実行（手動再デプロイは workflow_dispatch）
+- ビルドステップは無く、リポジトリのファイルがそのままアップロードされる。**dev 用ファイルは `.assetsignore` で配信対象から除外**しているので、配信すべきでないファイル・ディレクトリを追加したら必ず追記する（漏れると本番で公開される）
+- 404 は `wrangler.jsonc` の `assets.not_found_handling: "404-page"` により `404.html` を配信（GitHub Pages の custom 404 と同等の挙動）
+- 必要な GitHub Secrets: `CLOUDFLARE_API_TOKEN`（Account > Workers Scripts: Edit 権限）と `CLOUDFLARE_ACCOUNT_ID`
+- カスタムドメイン: **kajitack.com**（Cloudflare で取得・DNS 管理）。apex と `www` を Workers のカスタムドメインとして紐づける（同一 Cloudflare 内なので DNS レコード・証明書は自動管理）
+- 静的アセット配信はリクエスト数・帯域とも無制限・無料（Workers Free プランの 10 万 req/日制限は Worker スクリプト実行分のみで、静的配信には適用されない）
+
+### GitHub Pages からのカットオーバー手順（移行完了まで）
+
+1. Cloudflare ダッシュボードで API トークンを発行し、GitHub Secrets に `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` を登録
+2. main へのマージで初回 `wrangler deploy` が走り、`kajitack-website.<account>.workers.dev` で配信開始
+3. workers.dev URL で表示・404・言語自動判定を確認
+4. Cloudflare ダッシュボードで `kajitack.com` / `www.kajitack.com` を Workers のカスタムドメインに設定（GitHub Pages 向けの既存 A / CNAME レコードを置き換え）
+5. GitHub リポジトリ設定で Pages を無効化し、`CNAME` ファイルと `.assetsignore` の `CNAME` 行を削除する（別 PR）
 
 ## Local Preview
 
@@ -41,6 +48,12 @@ npx serve .
 ```
 
 ブラウザで `http://localhost:8000` を開く。
+
+本番同等の挙動（`.assetsignore` の除外、`404.html` の配信）まで確認したい場合は wrangler を使う:
+
+```bash
+pnpm exec wrangler dev --port 8787
+```
 
 ## Conventions
 
@@ -57,7 +70,7 @@ npx serve .
 - 両ページの `<head>` に `<link rel="alternate" hreflang>`（`ja` / `en` / `x-default`）と `og:locale` を相互に張る。各ページの `canonical` は自分自身
 - **`/en/` 配下はサブディレクトリなので、アセット参照は `../` 相対パス**（`../style.css`, `../images/...`, `../favicon.ico`）。`/` 直下は従来どおり `./`
 - 初回訪問の自動言語判定はルート `/` の `<head>` 内 IIFE でのみ行う（`localStorage.lang` 未設定 かつ `navigator.language` が英語なら `/en/` へ `location.replace`）。`/en/` 側では判定しない（リダイレクトループ防止）。言語スイッチャーのクリックで `localStorage.lang` を保存し、以降の自動判定を抑止する
-- **`404.html` は日英併記**。GitHub Pages の custom 404 はリポジトリ直下の `404.html` 一つしか効かず、`/en/404.html` はサブパスでも使われないため
+- **`404.html` は日英併記**（GitHub Pages 時代の制約に由来）。Cloudflare Workers の `not_found_handling: "404-page"` は最寄りの `404.html` を探すため、将来 `/en/404.html` を置いて言語別 404 に分けることも可能
 - `sitemap.xml` は全言語 URL を列挙し、各 `<url>` に `xhtml:link rel="alternate" hreflang` を付ける
 - 新しい言語別ページを追加したら、`tests/visual.spec.js` に対応する VRT を足す（ベースラインは CI で生成）
 

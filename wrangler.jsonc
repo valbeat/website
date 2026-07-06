@@ -1,0 +1,14 @@
+// Cloudflare Workers (static assets) の設定。
+// リポジトリのファイルをそのまま配信する（ビルドステップ無し）。
+// 配信対象外のファイルは .assetsignore で除外する。
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kajitack-website",
+  "compatibility_date": "2026-06-01",
+  "assets": {
+    "directory": "./",
+    // リクエストが既存アセットに一致しない場合は 404.html を返す
+    // (GitHub Pages の custom 404 と同じ挙動)
+    "not_found_handling": "404-page"
+  }
+}
