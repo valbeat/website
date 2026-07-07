@@ -5,6 +5,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "kajitack-website",
   "compatibility_date": "2026-06-01",
+  // workers.dev では配信しない。入口はカスタムドメイン (kajitack.com) のみ。
+  // ドメインの紐づけは DNS 書き換えを伴うため、CI のトークン権限
+  // (Workers Scripts:Edit のみ) では行えず、ダッシュボードで管理する。
+  "workers_dev": false,
+  "preview_urls": false,
   "assets": {
     "directory": "./",
     // リクエストが既存アセットに一致しない場合は 404.html を返す
