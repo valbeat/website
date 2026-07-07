@@ -26,18 +26,15 @@ Takuma Kajikawa の個人ポートフォリオ / ブログサイト。素の HTM
 - ビルドステップは無く、リポジトリのファイルがそのままアップロードされる。**dev 用ファイルは `.assetsignore` で配信対象から除外**しているので、配信すべきでないファイル・ディレクトリを追加したら必ず追記する（漏れると本番で公開される）
 - 404 は `wrangler.jsonc` の `assets.not_found_handling: "404-page"` により `404.html` を配信（GitHub Pages の custom 404 と同等の挙動）
 - 必要な GitHub Secrets: `CLOUDFLARE_API_TOKEN`（Account > Workers Scripts: Edit 権限）と `CLOUDFLARE_ACCOUNT_ID`
-- カスタムドメイン: **kajitack.com**（Cloudflare で取得・DNS 管理）。apex と `www` を Workers のカスタムドメインとして紐づける（同一 Cloudflare 内なので DNS レコード・証明書は自動管理）
+- カスタムドメイン: **kajitack.com**（Cloudflare で取得・DNS 管理）。apex を Workers のカスタムドメインとして紐づけ済み。`www` は apex への CNAME（プロキシ）が残っており、Cloudflare が自動で `https://kajitack.com/` へ 301 リダイレクトする（www 用の独立カスタムドメインは不要）
 - 静的アセット配信はリクエスト数・帯域とも無制限・無料（Workers Free プランの 10 万 req/日制限は Worker スクリプト実行分のみで、静的配信には適用されない）
+- workers.dev サブドメインは登録せず（`workers_dev: false` / `preview_urls: false`）、入口は kajitack.com のみ
 
-### GitHub Pages からのカットオーバー手順（移行完了まで）
+### GitHub Pages からの移行（完了済み）
 
-workers.dev のサブドメインは登録せず（`workers_dev: false`）、カスタムドメインを直接紐づける方式を取る。
+2026-07 に GitHub Pages から Cloudflare Workers へ移行完了。カットオーバーは Cloudflare DNS の apex A レコード（GitHub Pages 向け 185.199.108〜111.153）を削除 → Workers のカスタムドメインに kajitack.com を追加、という手順で実施した。移行時の検証: apex 200 / 404 ページ / `/en/` 200 / www 301→apex / Let's Encrypt 証明書、すべて確認済み。
 
-1. ~~GitHub Secrets に `CLOUDFLARE_API_TOKEN`（Workers Scripts:Edit のみの最小権限）/ `CLOUDFLARE_ACCOUNT_ID` を登録~~（済）
-2. `wrangler deploy` の成功を確認（この時点では Worker にアクセス経路は無い）
-3. Cloudflare ダッシュボードの Workers & Pages → kajitack-website → Settings → Domains & Routes で `kajitack.com` / `www.kajitack.com` をカスタムドメインとして追加（GitHub Pages 向けの既存 A / CNAME レコードを置き換え。**この操作がカットオーバーそのもの**）
-4. `https://kajitack.com` で表示・404・言語自動判定を確認。問題があればダッシュボードでドメインを外せば GitHub Pages に戻る
-5. GitHub リポジトリ設定で Pages を無効化し、`CNAME` ファイルと `.assetsignore` の `CNAME` 行を削除する（別 PR）
+ロールバックが必要な場合は、Cloudflare DNS に apex A レコード 4 つ（185.199.108.153 / 109 / 110 / 111）を戻し、Workers のカスタムドメインを外せば GitHub Pages に戻せる（GitHub Pages 側の設定を再有効化する前提）。
 
 ## Local Preview
 
