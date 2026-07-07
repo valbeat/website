@@ -25,9 +25,6 @@ CLAUDE.md
 README.md
 LICENSE
 
-# GitHub Pages 用（Cloudflare では不要）
-CNAME
-
 # Cloudflare 設定自体
 wrangler.jsonc
 .assetsignore
