@@ -1,0 +1,11 @@
+# pnpm の設定置き場（ワークスペース運用はしていない）。
+#
+# wrangler の推移的依存 (esbuild / sharp / workerd) はビルドスクリプトを持つが、
+# .npmrc の ignore-scripts=true の方針どおり実行を「拒否」する。
+# 明示しないと pnpm 11 はインストールを ERR_PNPM_IGNORED_BUILDS で失敗させる。
+# いずれもビルドスクリプト無しで動く: esbuild/workerd はバイナリを
+# optionalDependencies で取得し、sharp は deploy 経路では使われない。
+allowBuilds:
+  esbuild: false
+  sharp: false
+  workerd: false

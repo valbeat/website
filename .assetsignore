@@ -1,0 +1,44 @@
+# Cloudflare Workers static assets のアップロード除外リスト (.gitignore 構文)。
+# 「リポジトリ直下 = 配信ルート」の構成なので、dev 用ファイルをここで除外する。
+# 新しい dev 用ファイル・ディレクトリを追加したらここにも追記すること。
+
+# dev ツールチェーン
+node_modules/
+package.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+.npmrc
+playwright.config.js
+tests/
+test-results/
+current-screenshots/
+playwright-report/
+tools/
+
+# リポジトリのメタファイル
+.git/
+.gitignore
+.github/
+.claude/
+.coderabbit.yaml
+CLAUDE.md
+README.md
+LICENSE
+
+# GitHub Pages 用（Cloudflare では不要）
+CNAME
+
+# Cloudflare 設定自体
+wrangler.jsonc
+.assetsignore
+.wrangler/
+
+# ローカルから wrangler deploy した場合の漏洩防止
+# (CI は clean checkout なので通常は存在しないが、防御として明示する)
+.env
+.env.*
+.dev.vars*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
