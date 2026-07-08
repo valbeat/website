@@ -6,7 +6,7 @@ import path from "node:path";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const template = path.join(here, "template.html");
-const out = path.join(here, "..", "..", "images", "og.png");
+const out = path.join(here, "..", "..", "public", "images", "og.png");
 
 const browser = await chromium.launch();
 const page = await browser.newPage({

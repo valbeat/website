@@ -1,0 +1,53 @@
+---
+// 全ページ共通の HTML シェル。head の必須 meta・favicon・スタイル・
+// FOUC 防止スクリプトをまとめる。ページ固有の meta（OGP / hreflang /
+// canonical / JSON-LD / 言語自動判定）は `head` 名前付きスロットで渡す。
+interface Props {
+  lang: string;
+  title: string;
+  description: string;
+  /** 404 など検索対象外にするページで true */
+  noindex?: boolean;
+}
+
+const { lang, title, description, noindex = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#fdfdfd" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/style.css" />
+
+    <slot name="head" />
+
+    <script is:inline>
+      // FOUC 防止: localStorage のテーマを本文描画前に反映する。
+      // is:inline でバンドル/defer を抑止し、現行と同じ即時実行を保つ。
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored && stored !== "system") {
+            document.documentElement.setAttribute("data-theme", stored);
+            var isDark = stored === "dark";
+            document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+              m.setAttribute("content", isDark ? "#141414" : "#fdfdfd");
+            });
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

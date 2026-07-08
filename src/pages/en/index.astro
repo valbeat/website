@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteMeta from "../../components/SiteMeta.astro";
+import Footer from "../../components/Footer.astro";
+---
+
+<BaseLayout
+  lang="en"
+  title="Takuma Kajikawa"
+  description="Personal site of Takuma Kajikawa, a software engineer based in Tokyo. VP of Technology at TechBowl and a mentor at TechTrain."
+>
+  <Fragment slot="head">
+    <SiteMeta
+      lang="en"
+      ogDescription="Software engineer. VP of Technology at TechBowl and a TechTrain mentor."
+    />
+    <link rel="preload" as="image" href="/images/avatar.webp" type="image/webp" />
+  </Fragment>
+
+  <main>
+    <header>
+      <picture>
+        <source srcset="/images/avatar.webp" type="image/webp" />
+        <img class="avatar" src="/images/avatar.png" alt="" width="120" height="120" />
+      </picture>
+      <h1>Takuma Kajikawa</h1>
+      <p class="name-ja">梶川 琢馬</p>
+      <p class="lede">
+        Software Engineer / Tokyo, Japan
+      </p>
+      <p class="role">
+        VP of Technology @ TechBowl · TechTrain Mentor
+      </p>
+    </header>
+
+    <section>
+      <h2>About</h2>
+      <p>
+        After working in game, e-commerce, and SaaS development, I joined
+        TechBowl in 2023. As VP of Technology / EM, I lead the development and
+        the team behind TechTrain — a platform that supports engineers'
+        learning and careers. I also mentor engineers on the same service.
+      </p>
+    </section>
+
+    <section>
+      <h2>Find me</h2>
+      <ul class="link-list">
+        <li><a href="https://github.com/valbeat">GitHub</a></li>
+        <li><a href="https://twitter.com/kajitack">X</a></li>
+        <li><a href="https://www.facebook.com/kajitack">Facebook</a></li>
+        <li><a href="https://speakerdeck.com/kajitack">Speaker Deck</a></li>
+        <li><a href="https://zenn.dev/kajitack">Zenn</a></li>
+      </ul>
+    </section>
+
+    <Footer lang="en" />
+  </main>
+</BaseLayout>

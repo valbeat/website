@@ -1,0 +1,56 @@
+---
+// ja / en 両ページで共有する SEO / OGP メタ。lang から URL・ロケールを
+// 導出し、canonical・hreflang 相互リンク・OGP・Twitter Card・JSON-LD を出力する。
+interface Props {
+  lang: "ja" | "en";
+  /** OGP 用の短い説明（本文用 description とは別文言） */
+  ogDescription: string;
+}
+
+const { lang, ogDescription } = Astro.props;
+
+const SITE = "https://kajitack.com";
+const url = lang === "ja" ? `${SITE}/` : `${SITE}/en/`;
+const ogLocale = lang === "ja" ? "ja_JP" : "en_US";
+const ogLocaleAlt = lang === "ja" ? "en_US" : "ja_JP";
+---
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Takuma Kajikawa" />
+<meta property="og:description" content={ogDescription} />
+<meta property="og:url" content={url} />
+<meta property="og:image" content={`${SITE}/images/og.png`} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:locale:alternate" content={ogLocaleAlt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@kajitack" />
+<meta name="twitter:image" content={`${SITE}/images/og.png`} />
+
+<link rel="canonical" href={url} />
+<link rel="alternate" hreflang="ja" href={`${SITE}/`} />
+<link rel="alternate" hreflang="en" href={`${SITE}/en/`} />
+<link rel="alternate" hreflang="x-default" href={`${SITE}/`} />
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Takuma Kajikawa",
+  alternateName: "梶川 琢馬",
+  url,
+  image: `${SITE}/images/avatar.png`,
+  jobTitle: "VP of Technology",
+  worksFor: {
+    "@type": "Organization",
+    name: "TechBowl",
+    url: "https://techbowl.co.jp/",
+  },
+  sameAs: [
+    "https://github.com/valbeat",
+    "https://twitter.com/kajitack",
+    "https://www.facebook.com/kajitack",
+    "https://speakerdeck.com/kajitack",
+    "https://zenn.dev/kajitack",
+  ],
+})} />
