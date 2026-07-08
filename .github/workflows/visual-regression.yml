@@ -36,7 +36,7 @@ jobs:
           set -euo pipefail
           # Three-dot diff: changes on the PR head since it diverged from base.
           if git diff --name-only "${BASE_SHA}...HEAD" \
-            | grep -qE '\.(html|css|js)$|^images/|^tests/|^playwright\.config\.|^package\.json$|^pnpm-lock\.yaml$|^\.npmrc$|^\.github/workflows/visual-regression\.yml$|^\.github/scripts/build-visual-comment\.js$'; then
+            | grep -qE '\.(html|css|js|astro)$|^src/|^public/|^astro\.config\.|^tests/|^playwright\.config\.|^package\.json$|^pnpm-lock\.yaml$|^pnpm-workspace\.yaml$|^\.npmrc$|^\.github/workflows/visual-regression\.yml$|^\.github/scripts/build-visual-comment\.js$'; then
             echo "relevant=true" >> "$GITHUB_OUTPUT"
           else
             echo "relevant=false" >> "$GITHUB_OUTPUT"

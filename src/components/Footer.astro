@@ -1,0 +1,46 @@
+---
+// フッター: コピーライト + 言語スイッチャー + テーマスイッチャー。
+// lang により言語スイッチャーの現在言語（strong）とリンク先を切り替える。
+import ThemeSwitcher from "./ThemeSwitcher.astro";
+
+interface Props {
+  lang: "ja" | "en";
+}
+
+const { lang } = Astro.props;
+
+const langGroupLabel = lang === "ja" ? "言語" : "Language";
+const themeGroupLabel = lang === "ja" ? "テーマ" : "Theme";
+---
+
+<footer>
+  <p>&copy; 2026 Takuma Kajikawa</p>
+  <p class="lang-switcher" role="group" aria-label={langGroupLabel}>
+    <span aria-hidden="true">Language:</span>
+    {
+      lang === "ja" ? (
+        <strong aria-current="true">日本語</strong>
+        <span aria-hidden="true">·</span>
+        <a href="/en/" data-lang="en">English</a>
+      ) : (
+        <a href="/" data-lang="ja">日本語</a>
+        <span aria-hidden="true">·</span>
+        <strong aria-current="true">English</strong>
+      )
+    }
+  </p>
+  <ThemeSwitcher label={themeGroupLabel} />
+</footer>
+
+<script>
+  (function () {
+    var links = document.querySelectorAll(".lang-switcher a[data-lang]");
+    links.forEach(function (a) {
+      a.addEventListener("click", function () {
+        try {
+          localStorage.setItem("lang", a.dataset.lang);
+        } catch (e) {}
+      });
+    });
+  })();
+</script>

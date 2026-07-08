@@ -20,10 +20,12 @@ module.exports = defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: `python3 -m http.server ${PORT}`,
+    // Astro のビルド出力 (dist/) を配信する。Workers 本番と同じ静的ファイルを
+    // 撮影するため、素の静的サーバーで dist/ をそのまま配る。
+    command: `pnpm build && python3 -m http.server ${PORT} --directory dist`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
-    timeout: 30_000,
+    timeout: 60_000,
   },
   expect: {
     toHaveScreenshot: {

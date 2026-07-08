@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteMeta from "../components/SiteMeta.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<BaseLayout
+  lang="ja"
+  title="Takuma Kajikawa"
+  description="Takuma Kajikawa（梶川琢馬）の個人サイト。ソフトウェアエンジニア。VP of Technology at TechBowl, TechTrain メンター。"
+>
+  <Fragment slot="head">
+    <SiteMeta
+      lang="ja"
+      ogDescription="ソフトウェアエンジニア。VP of Technology at TechBowl, TechTrain メンター。"
+    />
+    <link rel="preload" as="image" href="/images/avatar.webp" type="image/webp" />
+
+    <script is:inline>
+      // 初回訪問の言語自動判定はルート（日本語）ページでのみ行う。
+      // 言語未選択かつブラウザが英語優先なら /en/ へ。replace() で履歴を汚さず、
+      // /en/ 側は判定しないためループしない。
+      (function () {
+        try {
+          if (
+            !localStorage.getItem("lang") &&
+            (navigator.language || "").toLowerCase().indexOf("en") === 0
+          ) {
+            location.replace("/en/" + location.search + location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </Fragment>
+
+  <main>
+    <header>
+      <picture>
+        <source srcset="/images/avatar.webp" type="image/webp" />
+        <img class="avatar" src="/images/avatar.png" alt="" width="120" height="120" />
+      </picture>
+      <h1>Takuma Kajikawa</h1>
+      <p class="name-ja">梶川 琢馬</p>
+      <p class="lede">
+        ソフトウェアエンジニア / Tokyo, Japan
+      </p>
+      <p class="role">
+        VP of Technology @ TechBowl ・ TechTrain メンター
+      </p>
+    </header>
+
+    <section>
+      <h2>About</h2>
+      <p>
+        ゲーム開発や EC 開発、SaaS 開発などを経て、2023 年に株式会社 TechBowl へ入社。
+        エンジニア向け学習・キャリア支援プラットフォーム TechTrain
+        の開発・組織をリード（VP of Technology / EM）。同サービスのメンターとしても活動中。
+      </p>
+    </section>
+
+    <section>
+      <h2>Find me</h2>
+      <ul class="link-list">
+        <li><a href="https://github.com/valbeat">GitHub</a></li>
+        <li><a href="https://twitter.com/kajitack">X</a></li>
+        <li><a href="https://www.facebook.com/kajitack">Facebook</a></li>
+        <li><a href="https://speakerdeck.com/kajitack">Speaker Deck</a></li>
+        <li><a href="https://zenn.dev/kajitack">Zenn</a></li>
+      </ul>
+    </section>
+
+    <Footer lang="ja" />
+  </main>
+</BaseLayout>

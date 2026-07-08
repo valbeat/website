@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  lang="ja"
+  title="404 — Takuma Kajikawa"
+  description="ページが見つかりませんでした。"
+  noindex={true}
+>
+  <main>
+    <header>
+      <h1>404</h1>
+      <p class="lede">お探しのページは見つかりませんでした。</p>
+      <p class="lede" lang="en">The page you’re looking for was not found.</p>
+    </header>
+    <p>
+      <a href="/">トップに戻る</a>
+      <span aria-hidden="true">·</span>
+      <a href="/en/" lang="en">Back to top</a>
+    </p>
+  </main>
+</BaseLayout>

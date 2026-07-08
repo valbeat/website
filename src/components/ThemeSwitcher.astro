@@ -1,0 +1,68 @@
+---
+// テーマ切替 UI + 挙動。ボタンの押下状態を localStorage と同期し、
+// 明示選択時は theme-color も固定、Auto 時は OS 追従に戻す。
+interface Props {
+  /** グループの aria-label（"テーマ" / "Theme"） */
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<p class="theme-switcher" role="group" aria-label={label}>
+  <span aria-hidden="true">Theme:</span>
+  <button type="button" data-theme-value="light" aria-pressed="false">Light</button>
+  <span aria-hidden="true">·</span>
+  <button type="button" data-theme-value="dark" aria-pressed="false">Dark</button>
+  <span aria-hidden="true">·</span>
+  <button type="button" data-theme-value="system" aria-pressed="true">Auto</button>
+</p>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll(".theme-switcher [data-theme-value]");
+    if (!buttons.length) return;
+    var current = "system";
+    try {
+      current = localStorage.getItem("theme") || "system";
+    } catch (e) {}
+    function sync(value) {
+      buttons.forEach(function (btn) {
+        btn.setAttribute(
+          "aria-pressed",
+          btn.dataset.themeValue === value ? "true" : "false"
+        );
+      });
+      // For an explicit Light/Dark choice, force both meta theme-color
+      // tags to the chosen color. For Auto (system), restore each meta's
+      // media-gated default so the browser can keep tracking OS changes.
+      document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+        var media = m.getAttribute("media") || "";
+        var darkSlot = media.indexOf("dark") !== -1;
+        var content;
+        if (value === "system") {
+          content = darkSlot ? "#141414" : "#fdfdfd";
+        } else {
+          content = value === "dark" ? "#141414" : "#fdfdfd";
+        }
+        m.setAttribute("content", content);
+      });
+    }
+    sync(current);
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var value = btn.dataset.themeValue;
+        try {
+          if (value === "system") {
+            localStorage.removeItem("theme");
+            document.documentElement.removeAttribute("data-theme");
+          } else {
+            localStorage.setItem("theme", value);
+            document.documentElement.setAttribute("data-theme", value);
+          }
+        } catch (e) {}
+        sync(value);
+      });
+    });
+  })();
+</script>
