@@ -10,13 +10,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
     "og:generate": "node tools/og/generate.mjs",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "@playwright/test": "^1.61.0",
     "astro": "^7.0.6",
+    "typescript": "^6.0.3",
     "wrangler": "^4.107.0"
   }
 }

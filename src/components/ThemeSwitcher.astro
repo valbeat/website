@@ -20,13 +20,15 @@ const { label } = Astro.props;
 
 <script>
   (function () {
-    var buttons = document.querySelectorAll(".theme-switcher [data-theme-value]");
+    var buttons = document.querySelectorAll<HTMLButtonElement>(
+      ".theme-switcher [data-theme-value]"
+    );
     if (!buttons.length) return;
     var current = "system";
     try {
       current = localStorage.getItem("theme") || "system";
     } catch (e) {}
-    function sync(value) {
+    function sync(value: string) {
       buttons.forEach(function (btn) {
         btn.setAttribute(
           "aria-pressed",
@@ -52,6 +54,7 @@ const { label } = Astro.props;
     buttons.forEach(function (btn) {
       btn.addEventListener("click", function () {
         var value = btn.dataset.themeValue;
+        if (!value) return;
         try {
           if (value === "system") {
             localStorage.removeItem("theme");
