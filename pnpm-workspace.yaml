@@ -5,7 +5,11 @@
 # 明示しないと pnpm 11 はインストールを ERR_PNPM_IGNORED_BUILDS で失敗させる。
 # いずれもビルドスクリプト無しで動く: esbuild/workerd はバイナリを
 # optionalDependencies で取得し、sharp は deploy 経路では使われない。
+# style-dictionary とその推移的依存 @bundled-es-modules/glob も同方針で拒否
+# （どちらもビルドスクリプト無しで動作することを tokens:build の実行で確認済み）。
 allowBuilds:
+  '@bundled-es-modules/glob': false
   esbuild: false
   sharp: false
+  style-dictionary: false
   workerd: false

@@ -8,10 +8,6 @@
         "/color$/",
         "fill",
         "stroke",
-        "background",
-        "border",
-        "outline",
-        "box-shadow",
         "font-family"
       ],
       {
