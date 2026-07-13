@@ -12,6 +12,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "og:generate": "node tools/og/generate.mjs",
+    "tokens:build": "npx -y style-dictionary@4 build --config tokens/config.mjs",
+    "tokens:check": "node tokens/check-contrast.mjs",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots"
   },

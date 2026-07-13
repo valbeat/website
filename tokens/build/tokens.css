@@ -1,0 +1,22 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ink: #0a0a0b; /** ページ地。最も暗い */
+  --carbon: #16161a; /** サーフェス・カード */
+  --panel: #111116; /** 部品タイルの地 */
+  --line: #23232a; /** ヘアライン・境界 0.5px */
+  --paper: #f2f0ea; /** 主要テキスト・高コントラスト面 */
+  --muted: #8a8a92; /** 二次テキスト */
+  --faint: #787880; /** システムラベル・三次情報。テキストとしては --ink 地専用（AA 4.5）。carbon/panel 上のテキストは muted を使う */
+  --signature: #ff7a1a; /** 差し色の主役（tangerine）。一撃だけ。面で塗らない */
+  --spectral-1: #ff3b6b;
+  --spectral-2: #ff9a2e;
+  --spectral-3: #ffe14d;
+  --spectral-4: #39e58c;
+  --spectral-5: #2ecbe8;
+  --spectral-6: #6a5cff;
+  --spectral-7: #c44dff;
+  --font-family-mono: 'JetBrains Mono', monospace; /** System / Telemetry。機械の声＝等幅（確定）。Display / Body は未定 */
+}
