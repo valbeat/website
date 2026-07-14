@@ -1,0 +1,26 @@
+{
+  "plugins": [
+    "stylelint-declaration-strict-value"
+  ],
+  "rules": {
+    "scale-unlimited/declaration-strict-value": [
+      [
+        "/color$/",
+        "fill",
+        "stroke",
+        "font-family"
+      ],
+      {
+        "ignoreValues": [
+          "transparent",
+          "currentColor",
+          "inherit",
+          "initial",
+          "none",
+          "0"
+        ],
+        "message": "token 外の値を直接書かない（design-system.md §03）。var(--x) を使うこと"
+      }
+    ]
+  }
+}
