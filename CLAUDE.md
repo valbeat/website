@@ -60,6 +60,8 @@ pnpm build && pnpm exec wrangler dev --port 8787
 - アセット参照は **root-absolute パス**（`/style.css`, `/images/...`, `/favicon.ico`）。apex カスタムドメイン配信なのでサブパス考慮は不要
 - 静的アセットは `public/` に置く（`public/images/`, `public/favicon.ico` 等）。ビルド時に `dist/` 直下へそのままコピーされる
 - グローバル CSS は `public/style.css`（URL を `/style.css` で安定させるため Astro のバンドルには通さず、`BaseLayout` から `<link>` で読む）
+- **日本語の本文は 1 段落 = 1 行で書く**（`.astro` ソース側で折り返さない）。HTML の改行はブラウザで半角スペースとして描画されるため、ソースを折り返すと「携わる。 その後、」のように句読点の後へ不自然なアキが入る。行が長くなるのは許容する（Prettier は導入していないので勝手に折り返されない）。英語ページは単語間が元々スペースなので折り返してよい
+- 全角の中黒「・」の前後に半角スペースを入れない（英語ページの `·` は半角なので前後にスペースが必要）
 
 ## Internationalization (i18n)
 
