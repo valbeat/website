@@ -41,23 +41,16 @@ import Footer from "../components/Footer.astro";
       </picture>
       <h1>Takuma Kajikawa</h1>
       <p class="name-ja">梶川 琢馬</p>
-      <p class="lede">
-        ソフトウェアエンジニア / Tokyo, Japan
-      </p>
-      <p class="role">
-        VP of Technology @ TechBowl ・ TechTrain メンター
-      </p>
+      <p class="lede">ソフトウェアエンジニア / Tokyo, Japan</p>
+      <p class="role">VP of Technology @ TechBowl・TechTrain メンター</p>
     </header>
 
     <section>
       <h2>About</h2>
-      <p>
-        石川高専出身。2016 年に株式会社コロプラへ入社し、ゲーム開発や基盤開発に携わる。
-        その後、複数のスタートアップで SaaS や EC などの開発を経て、2023 年に株式会社 TechBowl へ入社し、
-        2025 年に VP of Technology に就任。学生の IT
-        スキル習得とキャリアづくりを支援するサービス「TechTrain」の開発を担当し、同サービスのメンターも務める。
-        コミュニティでは、ソフトウェア設計や Agentic Coding をテーマに、カンファレンスや勉強会で登壇している。
-      </p>
+      {/* 日本語の本文は 1 段落 = 1 行で書く。ソース側で折り返すと、その改行が
+          ブラウザで半角スペースとして描画され、句読点の後に不自然なアキが出る。 */}
+      <p>石川高専出身。2016 年に株式会社コロプラへ入社し、ゲーム開発や基盤開発に携わる。その後、複数のスタートアップで SaaS や EC などの開発を経て、2023 年に株式会社 TechBowl へ入社。2025 年に VP of Technology に就任。</p>
+      <p>学生の IT スキル習得とキャリアづくりを支援するサービス「TechTrain」の開発を担当し、同サービスのメンターも務める。コミュニティでは、ソフトウェア設計や Agentic Coding をテーマに、カンファレンスや勉強会で登壇している。</p>
     </section>
 
     <section>

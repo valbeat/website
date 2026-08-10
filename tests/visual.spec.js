@@ -9,7 +9,11 @@ const themes = [
 
 for (const theme of themes) {
   test.describe(`theme=${theme.name}`, () => {
-    test.use({ colorScheme: theme.colorScheme });
+    // locale を ja-JP で固定する。既定の en-US のままだと index.astro の言語
+    // 自動判定が働いて "/" が "/en/" へリダイレクトされ、日本語トップの代わりに
+    // 英語ページを撮ってしまう（top-* と top-en-* が同じ絵になる）。
+    // "/en/" と "/404.html" は判定スクリプトを持たないのでこの指定の影響を受けない。
+    test.use({ colorScheme: theme.colorScheme, locale: "ja-JP" });
 
     test("top page", async ({ page }, testInfo) => {
       await page.goto("/");
