@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.1",
     "astro": "^7.2.0",
     "style-dictionary": "4.4.0",
     "stylelint": "17.14.1",
