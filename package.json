@@ -19,7 +19,7 @@
     "test:visual:update": "playwright test --update-snapshots"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "^0.9.10",
     "@playwright/test": "^1.61.1",
     "astro": "^7.2.0",
     "style-dictionary": "4.4.0",
