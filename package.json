@@ -21,7 +21,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@playwright/test": "^1.61.1",
-    "astro": "^7.2.2",
+    "astro": "^7.3.5",
     "style-dictionary": "4.4.0",
     "stylelint": "17.14.1",
     "stylelint-declaration-strict-value": "1.11.1",
