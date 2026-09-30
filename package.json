@@ -23,7 +23,7 @@
     "@playwright/test": "^1.61.1",
     "astro": "^7.2.2",
     "style-dictionary": "4.4.0",
-    "stylelint": "17.14.1",
+    "stylelint": "17.15.0",
     "stylelint-declaration-strict-value": "1.11.1",
     "typescript": "^6.0.3",
     "wrangler": "^4.123.0"
