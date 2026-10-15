@@ -1,6 +1,10 @@
-# CLAUDE.md
+# website
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## 位置づけ
+
+- 役割: kajitack.com のコード（Astro・public）。制作過程・好み・design system は private の valbeat/website-studio、hero のアート素材は valbeat/glitch-horse
+- 読む相手: website-studio（`design-system.md`・`tokens/`）。public なので、website-studio の検討過程や dashboard の私的な記録（`memo/`・`data/`・`projects/`）は読まず、Issue・PR・コミットにも貼らない
+- 自動で書くもの: なし。リポ群の地図は `~/src/github.com/valbeat/dashboard/docs/knowledge/repo-map.md`
 
 ## Project Overview
 
