@@ -22,7 +22,7 @@
     "@astrojs/check": "^0.9.10",
     "@playwright/test": "^1.64.1",
     "astro": "^7.3.5",
-    "style-dictionary": "4.4.0",
+    "style-dictionary": "5.7.0",
     "stylelint": "17.16.0",
     "stylelint-declaration-strict-value": "1.12.1",
     "typescript": "^6.0.3",
