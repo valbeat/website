@@ -1,0 +1,13 @@
+# Cloudflare Workers static assets のレスポンスヘッダ。
+# このファイル自体は配信されない。Worker スクリプトは使わない。
+# https://developers.cloudflare.com/workers/static-assets/headers/
+#
+# HSTS は初期の短期値（max-age=300、5 分）。
+# includeSubDomains と preload は付けない。
+# 伸ばす・サブドメインへ広げる・preload へ出す作業は別対応。
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=300

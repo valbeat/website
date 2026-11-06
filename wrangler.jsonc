@@ -15,5 +15,7 @@
     // リクエストが既存アセットに一致しない場合は 404.html を返す
     // (GitHub Pages の custom 404 と同じ挙動)
     "not_found_handling": "404-page"
+    // セキュリティヘッダは public/_headers（ビルド後は dist/_headers）。
+    // 静的アセット応答だけに適用され、Worker スクリプトは置かない。
   }
 }

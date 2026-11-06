@@ -28,6 +28,11 @@ Takuma Kajikawa の個人ポートフォリオ / ブログサイト。**Astro** 
 - カスタムドメイン: **kajitack.com**（Cloudflare で取得・DNS 管理）。apex を Workers のカスタムドメインとして紐づけ済み。`www` は apex への CNAME（プロキシ）が残っており、Cloudflare が自動で `https://kajitack.com/` へ 301 リダイレクトする（www 用の独立カスタムドメインは不要）
 - 静的アセット配信はリクエスト数・帯域とも無制限・無料（Workers Free プランの 10 万 req/日制限は Worker スクリプト実行分のみで、静的配信には適用されない）
 - workers.dev サブドメインは登録せず（`workers_dev: false` / `preview_urls: false`）、入口は kajitack.com のみ
+- レスポンスヘッダは `public/_headers`（ビルドで `dist/_headers` にコピー）。Workers の静的アセット配信が解釈し、ファイル自体は配信しない。Worker スクリプトは置かない（置いた応答には `_headers` が付かない）
+  - 全パス (`/*`): `X-Frame-Options: DENY`、`X-Content-Type-Options: nosniff`、`Referrer-Policy: strict-origin-when-cross-origin`、`Strict-Transport-Security: max-age=300`
+  - HSTS は短期（5 分）。`includeSubDomains` と `preload` は付けない。`max-age` を伸ばす、サブドメインへ広げる、preload へ出す、は別対応
+  - ロールバックは `public/_headers` を削除して再デプロイする。HSTS を受け取ったブラウザは最大 5 分でそのポリシーが切れる。DNS と Cloudflare ダッシュボードはこの変更の対象外
+  - `www` の apex への 301 は Cloudflare が返すため、このファイルのヘッダは付かない
 
 ### GitHub Pages からの移行（完了済み）
 
